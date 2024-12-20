@@ -1,0 +1,34 @@
+"userInfo": {
+      "USER_ID": "objectId_12345",
+      "userName": "JohnDoe",
+      "email": "johndoe@example.com"
+    },
+    "Clips": [
+      {
+        "date": "2024-12-20",
+        "clip": {
+          "clipName": "Sample Clip 1",
+          "attributeCount": "5",
+          "totel_number": "15",
+          "type": "video"
+        }
+      },
+      {
+        "date": "2024-12-21",
+        "clip": {
+          "clipName": "Sample Clip 2",
+          "attributeCount": "3",
+          "totel_number": "10",
+          "type": "audio"
+        }
+      }
+    ],
+    "achievement": {
+      "total_achievement": "100",
+      "delta_achievement": "10",
+      "countofDates": "30"
+    }
+  }
+
+
+
