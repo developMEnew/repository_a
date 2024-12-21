@@ -1,55 +1,49 @@
+'use client';
 
-import Image from "next/image";
+import { Home, Eye, ListChecks, User } from "lucide-react";
 import { useState } from "react";
+import { HomeTab } from "./components/home-tab";
+import { ViewTab } from "./components/view-tab";
+import { ManageTab } from "./components/manage-tab";
 
-export default function Home() {
-  
+export default function App() {
   const [activeTab, setActiveTab] = useState('home');
+
+  const ProfileTab = () => <div className="p-4">Profile Content</div>;
+  const UserTab = () => <div className="p-4">User Content</div>;
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <main className="flex-1 overflow-y-auto">
+    <div className="flex flex-col h-screen bg-gray-50">
+      <main className="flex-1 overflow-y-auto pb-20">
         {activeTab === 'home' && <HomeTab />}
         {activeTab === 'view' && <ViewTab />}
         {activeTab === 'manage' && <ManageTab />}
-        {activeTab === 'profile' &&  <ProfileTab />}
+        {activeTab === 'profile' && <ProfileTab />}
         {activeTab === 'user' && <UserTab />}
       </main>
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="fixed bottom-0 w-full max-w-md">
-        <TabsList className="grid grid-cols-5 h-16 bg-background border-t">
-          <TabsTrigger value="home" className="flex flex-col gap-1 data-[state=active]:text-primary">
-            <Home className="h-5 w-5" />
-            <span className="text-xs">Home</span>
-          </TabsTrigger>
-          <TabsTrigger 
-            value="view" 
-            className="flex flex-col gap-1 data-[state=active]:text-primary"
-          >
-            <Eye className="h-5 w-5" />
-            <span className="text-xs">View</span>
-          </TabsTrigger>
-          <TabsTrigger 
-            value="manage"
-            className="flex flex-col gap-1 data-[state=active]:text-primary"
-          >
-            <ListChecks className="h-5 w-5" />
-            <span className="text-xs">Manage</span>
-          </TabsTrigger>
-          <TabsTrigger 
-            value="profile"
-            className="flex flex-col gap-1 data-[state=active]:text-primary"
-          >
-            <User className="h-5 w-5" />
-            <span className="text-xs">Profile</span>
-          </TabsTrigger>
-          <TabsTrigger 
-            value="user"
-            className="flex flex-col gap-1 data-[state=active]:text-primary"
-          >
-            <User className="h-5 w-5" />
-            <span className="text-xs">User</span>
-          </TabsTrigger>
-        </TabsList>
-      </Tabs>
-    </main>
+
+      <nav className="fixed bottom-0 w-full border-t bg-white">
+        <div className="grid grid-cols-5 h-16">
+          {[
+            { id: 'home', icon: Home, label: 'Home' },
+            { id: 'view', icon: Eye, label: 'View' },
+            { id: 'manage', icon: ListChecks, label: 'Manage' },
+            { id: 'profile', icon: User, label: 'Profile' },
+            { id: 'user', icon: User, label: 'User' }
+          ].map(({ id, icon: Icon, label }) => (
+            <button
+              key={id}
+              onClick={() => setActiveTab(id)}
+              className={`flex flex-col items-center justify-center space-y-1 ${
+                activeTab === id ? 'text-blue-500' : 'text-gray-500'
+              }`}
+            >
+              <Icon className="h-5 w-5" />
+              <span className="text-xs">{label}</span>
+            </button>
+          ))}
+        </div>
+      </nav>
+    </div>
   );
 }
