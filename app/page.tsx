@@ -5,11 +5,11 @@ import { useState } from "react";
 import { HomeTab } from "./components/home-tab";
 import { ViewTab } from "./components/view-tab";
 import { ManageTab } from "./components/manage-tab";
+import { ProfileTab } from "./components/profile-tab";
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('home');
 
-  const ProfileTab = () => <div className="p-4">Profile Content</div>;
   const UserTab = () => <div className="p-4">User Content</div>;
 
   return (

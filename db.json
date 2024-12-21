@@ -1,0 +1,24 @@
+{
+  "uId": 12345,
+  "user": "san",
+  "uName": "John Doe",
+  "uMonth": "December",
+  "months": {
+    "January": {
+      "target": 4000,
+      "countOfDates": 22,
+      "deltaAchievement": 45500
+    },
+    "February": {},
+    "March": {},
+    "April": {},
+    "May": {},
+    "June": {},
+    "July": {},
+    "August": {},
+    "September": {},
+    "October": {},
+    "November": {},
+    "December": {}
+  }
+}
