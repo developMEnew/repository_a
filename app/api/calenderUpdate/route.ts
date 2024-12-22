@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import Calendar from '@/app/models/Calender'; // Adjust the path as per your project structure
+import Calendar from '@/app/models/Calender2'; // Adjust the path as per your project structure
 import dbConnect from '@/lib/dbConnect';// Ensure you have a MongoDB connection utility
 
 export async function PUT(req: NextApiRequest, res: NextApiResponse) {
