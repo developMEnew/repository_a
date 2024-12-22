@@ -1,74 +1,72 @@
-import { useCalendarState } from "../hooks/useCalendarState";
-import { CalendarView } from "./ui/calendar-view";
-import { MonthSelector } from "./ui/month-selector";
-import { CounterDisplay } from "./ui/counter-display";
-import { UpdateButton } from "./calendar/UpdateButton";
-import { countSelectedDaysPerMonth } from "../utils/calendar";
-import { useEffect, useState } from "react";
-
-interface Calendar {
-  id: number;
-  user: string;
-  months: {};
-}
+import { useCalendarState } from '../hooks/useCalendarState';
+import { CalendarView } from './ui/calendar-view';
+import { MonthSelector } from './ui/month-selector';
+import { CounterDisplay } from './ui/counter-display';
+import { UpdateButton } from './calendar/UpdateButton';
+import { countSelectedDaysPerMonth } from '../utils/calendar';
+import { useCalendarData } from '../hooks/useCalendarData';
+import { useState } from 'react';
 
 export function ProfileTab() {
-  ////////////////
-  const [data, setData] = useState<Calendar[] | null>(null);
-  const [exData, setExData] = useState<{ [key: string]: number[] } | null>(
-    null
-  );
-
-  useEffect(() => {
-    async function fetchData() {
-      const response = await fetch("api/calendarView");
-      const result = await response.json();
-
-      if (result.success) {
-        setData(result.data);
-      } else {
-        console.error("Error fetching calendar data:", result.error);
-      }
-    }
-
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    if (data && data.length > 0) {
-      setExData(data[0].months);
-    }
-  }, [data]);
-  console.log(exData);
-  //////////////////
+  const userId = "current-user-id";
+  const [year] = useState(new Date().getFullYear());
+  
+  const { 
+    calendarData, 
+    loading, 
+    error, 
+    updateCalendarData,
+    getMonthData 
+  } = useCalendarData({ userId, year });
 
   const {
     selectedDays,
     selectedMonth,
     setMonth,
     toggleDay,
-    getSelectedDayNumbers,
-  } = useCalendarState();
+    getSelectedDayNumbers
+  } = useCalendarState(userId);
 
-  const handleUpdate = () => {
+  const handleUpdate = async () => {
     const selectedNumbers = getSelectedDayNumbers();
-    console.log("Selected day numbers:", selectedNumbers);
+    const currentMonthData = getMonthData(selectedMonth);
+    
+    const success = await updateCalendarData(selectedMonth, {
+      selectedDays: selectedNumbers,
+      target: currentMonthData?.target || 0,
+      achieved: currentMonthData?.achieved || 0
+    });
+
+    if (success) {
+      console.log('Calendar updated successfully');
+    }
   };
 
-  const monthCounts = countSelectedDaysPerMonth(selectedDays );
+  const monthCounts = countSelectedDaysPerMonth(selectedDays);
   const currentMonthCount = monthCounts.get(selectedMonth) || 0;
+
+  if (loading) {
+    return <div className="p-4">Loading calendar data...</div>;
+  }
+
+  if (error) {
+    return <div className="p-4 text-red-500">Error: {error}</div>;
+  }
 
   return (
     <div className="p-4 space-y-6">
       <CounterDisplay
         count={currentMonthCount}
-        monthlyCounts={monthCounts}
         selectedMonth={selectedMonth}
+        lastUpdated={calendarData?.lastUpdated}
       />
-      <MonthSelector selectedMonth={selectedMonth} onChange={setMonth} />
+      <MonthSelector 
+        selectedMonth={selectedMonth} 
+        onChange={setMonth} 
+      />
       <CalendarView
         month={selectedMonth}
-        year={2025}
+        year={year}
         selectedDays={selectedDays}
         onDayToggle={toggleDay}
       />

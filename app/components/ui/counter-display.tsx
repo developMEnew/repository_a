@@ -1,13 +1,19 @@
 interface CounterDisplayProps {
   count: number;
-  monthlyCounts: Map<string, number>;
   selectedMonth: string;
+  lastUpdated?: Date;
 }
 
-export function CounterDisplay({ count, monthlyCounts, selectedMonth }: CounterDisplayProps) {
-  const summaryEntries = Array.from(monthlyCounts.entries())
-    .filter(([_, count]) => count > 0)
-    .sort(([monthA], [monthB]) => monthA.localeCompare(monthB));
+export function CounterDisplay({ count, selectedMonth, lastUpdated }: CounterDisplayProps) {
+  const formatDate = (date: Date) => {
+    return new Intl.DateTimeFormat('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    }).format(date);
+  };
 
   return (
     <div className="bg-blue-500 rounded-2xl p-6 text-white">
@@ -17,16 +23,11 @@ export function CounterDisplay({ count, monthlyCounts, selectedMonth }: CounterD
         <p className="text-sm mt-1">in {selectedMonth}</p>
       </div>
       
-      {summaryEntries.length > 0 && (
+      {lastUpdated && (
         <div className="border-t border-white/20 mt-4 pt-4">
-          <h3 className="text-sm opacity-80 mb-2">Monthly Summary</h3>
-          <div className="space-y-2">
-            {summaryEntries.map(([month, count]) => (
-              <div key={month} className="flex justify-between items-center text-sm">
-                <span>{month}</span>
-                <span className="font-medium">{count} days</span>
-              </div>
-            ))}
+          <div className="flex justify-between items-center text-sm">
+            <span className="opacity-80">Last Updated</span>
+            <span className="font-medium">{formatDate(new Date(lastUpdated))}</span>
           </div>
         </div>
       )}

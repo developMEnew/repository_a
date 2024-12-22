@@ -1,33 +1,29 @@
 import { useState, useEffect } from 'react';
-import { getPreselectedDaysForMonth } from '../data/calendarData';
+import { getPreselectedDaysForMonth, parseDayKey } from '../utils/calendarHelpers';
+import { months } from '../utils/calendar';
+import { useCalendarData } from './useCalendarData';
 
-export interface CalendarState {
-  selectedDays: Set<string>;
-  selectedMonth: string;
-}
-
-export function useCalendarState() {
-
-  const [state, setState] = useState<CalendarState>({
+export function useCalendarState(userId: string) {
+  const { calendarData } = useCalendarData({ userId });
+  const [state, setState] = useState({
     selectedDays: new Set<string>(),
-    selectedMonth: 'January'
+    selectedMonth: months[0]
   });
 
   // Load pre-selected days when component mounts or month changes
   useEffect(() => {
-    const preselectedDays = getPreselectedDaysForMonth(state.selectedMonth);
-  
+    const preselectedDays = getPreselectedDaysForMonth(state.selectedMonth, calendarData);
     setState(prevState => ({
       ...prevState,
       selectedDays: preselectedDays
     }));
-  }, [state.selectedMonth]);
+  }, [state.selectedMonth, calendarData]);
 
   const setMonth = (newMonth: string) => {
-    setState({
+    setState(prevState => ({
       selectedDays: new Set<string>(),
       selectedMonth: newMonth
-    });
+    }));
   };
 
   const toggleDay = (day: string) => {
@@ -43,7 +39,7 @@ export function useCalendarState() {
   const getSelectedDayNumbers = () => {
     return Array.from(state.selectedDays)
       .filter(day => day.startsWith(state.selectedMonth))
-      .map(day => parseInt(day.split('-')[1]))
+      .map(day => parseDayKey(day).day)
       .sort((a, b) => a - b);
   };
 

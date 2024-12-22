@@ -1,6 +1,6 @@
 'use client';
 
-import { Home, Eye, ListChecks, User } from "lucide-react";
+import { Home, Eye, ListChecks, Calendar } from "lucide-react";
 import { useState } from "react";
 import { HomeTab } from "./components/home-tab";
 import { ViewTab } from "./components/view-tab";
@@ -18,18 +18,16 @@ export default function App() {
         {activeTab === 'home' && <HomeTab />}
         {activeTab === 'view' && <ViewTab />}
         {activeTab === 'manage' && <ManageTab />}
-        {activeTab === 'profile' && <ProfileTab />}
-        {activeTab === 'user' && <UserTab />}
+        {activeTab === 'calendar' && <ProfileTab />}
       </main>
 
       <nav className="fixed bottom-0 w-full border-t bg-white">
-        <div className="grid grid-cols-5 h-16">
+        <div className="grid grid-cols-4 h-16">
           {[
             { id: 'home', icon: Home, label: 'Home' },
             { id: 'view', icon: Eye, label: 'View' },
             { id: 'manage', icon: ListChecks, label: 'Manage' },
-            { id: 'profile', icon: User, label: 'Profile' },
-            { id: 'user', icon: User, label: 'User' }
+            { id: 'calendar', icon: Calendar, label: 'Calendar' }
           ].map(({ id, icon: Icon, label }) => (
             <button
               key={id}
